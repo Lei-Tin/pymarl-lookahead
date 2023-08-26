@@ -1,4 +1,5 @@
-FROM nvidia/cuda:9.2-cudnn7-devel-ubuntu16.04
+# FROM nvidia/cuda:9.2-cudnn7-devel-ubuntu16.04
+FROM nvidia/cuda:11.0.3-cudnn8-devel-ubuntu16.04
 MAINTAINER Tabish Rashid
 
 # CUDA includes
@@ -25,6 +26,7 @@ RUN apt-get -y install python3-pip
 RUN pip3 install --upgrade pip
 
 # Python packages we use (or used at one point...)
+RUN curl -fsSL https://bootstrap.pypa.io/pip/3.5/get-pip.py | python3.5
 RUN pip3 install numpy scipy pyyaml matplotlib
 RUN pip3 install imageio
 RUN pip3 install tensorboard-logger
