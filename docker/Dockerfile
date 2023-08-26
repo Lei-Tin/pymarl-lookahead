@@ -24,30 +24,30 @@ RUN apt-get update
 RUN apt-get -y install python3
 RUN apt-get -y install python3-pip
 RUN pip3 install --upgrade pip
-
-# Python packages we use (or used at one point...)
 RUN curl -fsSL https://bootstrap.pypa.io/pip/3.5/get-pip.py | python3.5
-RUN pip3 install numpy scipy pyyaml matplotlib
-RUN pip3 install imageio
-RUN pip3 install tensorboard-logger
-RUN pip3 install pygame
 
 RUN mkdir /install
 WORKDIR /install
 
-RUN pip3 install jsonpickle==0.9.6
-# install Sacred (from OxWhirl fork)
-RUN pip3 install setuptools
-RUN git clone https://github.com/oxwhirl/sacred.git /install/sacred && cd /install/sacred && python3 setup.py install
-
 #### -------------------------------------------------------------------
 #### install pytorch
 #### -------------------------------------------------------------------
-RUN pip3 install torch
-RUN pip3 install torchvision snakeviz pytest probscale
+RUN pip3 install torch===0.4.1 torchvision -f https://download.pytorch.org/whl/torch_stable.html
+
+COPY requirements.txt /pymarl/requirements.txt
+RUN pip install -r /pymarl/requirements.txt
+
+RUN pip3 install jsonpickle==0.9.6
+# install Sacred (from OxWhirl fork)
+RUN pip3 install setuptools===20.7.0
+RUN git clone https://github.com/oxwhirl/sacred.git /install/sacred && cd /install/sacred && python3 setup.py install
 
 ## -- SMAC
 RUN pip3 install git+https://github.com/oxwhirl/smac.git
 ENV SC2PATH /pymarl/3rdparty/StarCraftII
 
+COPY . /pymarl
+
 WORKDIR /pymarl
+
+RUN bash install_sc2.sh
